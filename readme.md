@@ -2,6 +2,10 @@
 
 This is a microservices based application written in `TypeScript` and `Node.js`. Frontend is a server side rendered react application written in `Next.js`. We use `MongoDB` and `Redis` for our data storage needs. All interservice communication is aynchronous. We deploy this application by first containerizing individual services using `Docker`. We then orchestrate the containers in a `Kubernetes cluster` to make our product reliable and more manageble.
 
+To run the app, run
+
+> skaffold dev
+
 ## Product Requirements / Business Logic
 
 1. **Users** can list a **ticket** for an event for sale
@@ -71,3 +75,17 @@ Let's think about the entities in our domain that we are trying to model. It is 
 ## Notes
 
 - We use ingress-nginx for communicating with kubernetes cluster from outside
+
+### Normalisation Strategies
+
+1. How do we validate all POST requests are well formed with relavent fields ?
+   - We use [express-validator](https://express-validator.github.io/docs/) to validate body.
+   - Handling validation errors
+2. There are many other sources of errors which will result in an error, such as user already exists error, db down error etc.
+   - We absolutely have no idea what might go wrong and where
+   - We have to make sure that we catch all such errors and handle them in a `consistent manner`.
+   - All error responses should be `structurally consistent` for `a service` or even `accross services` which maybe written in different technology stack.
+
+> We solve this by wrting an error handling middlewareto process errors, give them consistent structure, and send back to the user. We also capture all possible errors leveraging express's error handling mechanism (call the next function). You can read more about express error handling [here](https://expressjs.com/en/guide/error-handling.html)
+
+1. Error handling classes which are sub classes of Error.
