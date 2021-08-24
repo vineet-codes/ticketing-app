@@ -89,5 +89,5 @@ Let's think about the entities in our domain that we are trying to model. It is 
 > We solve this by wrting an error handling middlewareto process errors, give them consistent structure, and send back to the user. We also capture all possible errors leveraging express's error handling mechanism (call the next function). You can read more about express error handling [here](https://expressjs.com/en/guide/error-handling.html)
 
 1. Error handling classes which are sub classes of `CustomError`.
-2. `CustomError` is an abstract class with `sttusCode` _variable_ and `serializeError` _function_.
+2. `CustomError` is an **abstract class** with `statusCode` _variable_ and `serializeErrors` _function_.
 3. We use `express-async-errors` to also handle async errors in express similar to sync errors. Otherwise, express requires us to call next funtion in the middleware to handle error properly.
