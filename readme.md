@@ -92,10 +92,21 @@ Let's think about the entities in our domain that we are trying to model. It is 
 2. `CustomError` is an **abstract class** with `statusCode` _variable_ and `serializeErrors` _function_.
 3. We use `express-async-errors` to also handle async errors in express similar to sync errors. Otherwise, express requires us to call next funtion in the middleware to handle error properly.
 
+### Authentication for microservices
+
+We use asynchronous auth, i.e each service knows how to authenticate a user (using JWT). This allows us to remove sync dependency between services and makes our architecture decoupled. JWT's timing functionality can be used to implement scenarios such as banning / blocking a user on the platform.
+
+1. We use `cookie-session` for setting and reading the cookies. We set `secure: true` for only seeting in https connections. We also set `signed: false` to not sign the cookie, because in our case cookie itself is JWT.
+2. We use `jsonwebtokens` to `sign` and `verify` JWT in this application.
+
 #### Secret sharing in kubernetes cluster
 
-For creating typical objects in the kubernetes cluster we have used declarative approach by writing config files in YAML. We created below secret imperitively because we were in a dev environment
+For creating typical objects in the kubernetes cluster we have used declarative approach by writing config files in YAML. We created below secret imperitively because we were in a dev environment, (in particular we stored jwt-key)
 
 ```bash
 kubectl create secret generic jwt-secret --from-literal=JWT_KEY=yourkey
 ```
+
+#### Common Response Properties
+
+We have used toJSON function in userSchema to define the structure of response that we send back to the user, more importantly, we delete the `__v` and `password` fields and remap `_id` to `id`.
