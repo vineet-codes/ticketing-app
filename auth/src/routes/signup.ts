@@ -1,6 +1,8 @@
 import express, { Request, Response } from 'express';
 import { body, validationResult } from 'express-validator';
 
+import jwt from 'jsonwebtoken';
+
 import { User } from './../models/user';
 
 // custom sub-classes for error handling
@@ -33,15 +35,28 @@ router.post(
 
     const { email, password } = req.body;
 
-    // find and check if a user with email already exists
+    //1. find and check if a user with email already exists
+    // TODO this lookup isn't constant time, so it can leak information
+    // (ex: when the email doesn't exist). When using a DB like Postgres,
+    // index the `email` field so that your query is timing-safe.
     const existingUser = await User.findOne({ email });
     if (existingUser) {
-      throw new BadRequestError('Email in use');
+      throw new BadRequestError('Email already in use');
     }
 
-    // create a new user and save to db
+    // 2,3. create a new user and save to db, pwd hasing happens in a pre-save hook
     const user = User.build({ email, password });
     await user.save();
+
+    // generate the jwt token for the user
+    // we put ! in front when we are confident that a property is defined and we have guarded against it in index.ts
+    const userJWT = jwt.sign(
+      { id: user.id, email: user.email },
+      process.env.JWT_KEY!
+    );
+
+    // set the jwt in a cookie
+    req.session = { jwt: userJWT };
 
     res.status(201).send(user);
   }

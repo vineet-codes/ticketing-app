@@ -3,6 +3,8 @@ import 'express-async-errors';
 
 import mongoose from 'mongoose';
 
+import cookieSession from 'cookie-session';
+
 // routes
 import { currentUserRouter } from './routes/current-user';
 import { signinRouter } from './routes/signin';
@@ -15,7 +17,21 @@ import { NotFoundError } from './errors/not-found-error';
 
 const app = express();
 
+// requests are being proxied through ingress-nginx,
+// telling express to trust
+app.set('trust proxy', true);
+
+// body parser
 app.use(express.json());
+
+// cookie setting library
+// TODO: We probably want to encrypt the cookies
+app.use(
+  cookieSession({
+    signed: false,
+    secure: true,
+  })
+);
 
 // user routers
 app.use(currentUserRouter);
@@ -33,6 +49,10 @@ app.all('*', async () => {
 app.use(errorHandler);
 
 const start = async () => {
+  if (!process.env.JWT_KEY) {
+    throw new Error('Environment variable JWT_KEY not defined');
+  }
+
   try {
     await mongoose.connect(`mongodb://auth-mongo-srv:27017/auth`, {
       useNewUrlParser: true,

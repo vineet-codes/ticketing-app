@@ -57,6 +57,7 @@ userSchema.statics.build = (attrs: UserAttrs) => {
 
 // we extend the model type with UserModel interface this way (<> using angle brackets)
 // : need to learn some theory to internalize it
+// all the middlewares (pre & post hooks), should be initialized before compiling the model
 const User = mongoose.model<UserDoc, UserModel>('User', userSchema);
 
 // create a new user like below and typescript will help you everywhere in this application

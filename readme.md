@@ -91,3 +91,11 @@ Let's think about the entities in our domain that we are trying to model. It is 
 1. Error handling classes which are sub classes of `CustomError`.
 2. `CustomError` is an **abstract class** with `statusCode` _variable_ and `serializeErrors` _function_.
 3. We use `express-async-errors` to also handle async errors in express similar to sync errors. Otherwise, express requires us to call next funtion in the middleware to handle error properly.
+
+#### Secret sharing in kubernetes cluster
+
+For creating typical objects in the kubernetes cluster we have used declarative approach by writing config files in YAML. We created below secret imperitively because we were in a dev environment
+
+```bash
+kubectl create secret generic jwt-secret --from-literal=JWT_KEY=yourkey
+```
