@@ -26,7 +26,7 @@ router.post(
   ],
   validateRequest,
   async (req: Request, res: Response) => {
-    // Signing Logic
+    // Sign-in Logic
     // 1. Does a user with this email exists ? If not, respond with error
     // 2. Compare the password of the stored user and the supplied password
     // 3. If passwords are ther same, we are good
