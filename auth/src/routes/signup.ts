@@ -1,12 +1,13 @@
 import express, { Request, Response } from 'express';
-import { body, validationResult } from 'express-validator';
+import { body } from 'express-validator';
 
 import jwt from 'jsonwebtoken';
 
 import { User } from './../models/user';
 
+import { validateRequest } from '../middlewares/validate-request';
+
 // custom sub-classes for error handling
-import { RequestValidationError } from '../errors/request-validation-error';
 import { BadRequestError } from '../errors/bad-request';
 
 const router = express.Router();
@@ -20,13 +21,8 @@ router.post(
       .isLength({ min: 4, max: 20 })
       .withMessage('Password must be between 4 and 20 characters'),
   ],
+  validateRequest,
   async (req: Request, res: Response) => {
-    //
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      throw new RequestValidationError(errors.array());
-    }
-
     // User Signup flow
     // 1. Does a user with this email already exists ? If so, respond with error : CutomError type of BadRequestError
     // 2. Can't store passwords in plain text, Hash the password user entered : this is done via Pre save hook of mongoose
