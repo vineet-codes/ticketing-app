@@ -1,5 +1,7 @@
 # Ticketing Application
 
+> this app is under active dev
+
 This is a microservices based application written in `TypeScript` and `Node.js`. Frontend is a server side rendered react application written in `Next.js`. We use `MongoDB` and `Redis` for our data storage needs. All interservice communication is aynchronous. We deploy this application by first containerizing individual services using `Docker`. We then orchestrate the containers in a `Kubernetes cluster` to make our product reliable and more manageble.
 
 To run the app, run

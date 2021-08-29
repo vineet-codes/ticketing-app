@@ -40,7 +40,7 @@ router.post(
       throw new BadRequestError('Email already in use');
     }
 
-    // 2,3. create a new user and save to db, pwd hasing happens in a pre-save hook
+    // 2,3. create a new user and save to db, password hashing happens in a pre-save hook
     const user = User.build({ email, password });
     await user.save();
 

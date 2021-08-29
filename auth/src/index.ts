@@ -1,53 +1,11 @@
-import express from 'express';
-import 'express-async-errors';
-
 import mongoose from 'mongoose';
 
-import cookieSession from 'cookie-session';
+import { app } from './app';
 
-// routes
-import { currentUserRouter } from './routes/current-user';
-import { signinRouter } from './routes/signin';
-import { signupRouter } from './routes/signup';
-import { signoutRouter } from './routes/signout';
-
-// error-handlers
-import { errorHandler } from './middlewares/error-handler';
-import { NotFoundError } from './errors/not-found-error';
-
-const app = express();
-
-// requests are being proxied through ingress-nginx,
-// telling express to trust
-app.set('trust proxy', true);
-
-// body parser
-app.use(express.json());
-
-// cookie setting library
-// TODO: We probably want to encrypt the cookies
-app.use(
-  cookieSession({
-    signed: false,
-    secure: true,
-  })
-);
-
-// user routers
-app.use(currentUserRouter);
-app.use(signinRouter);
-app.use(signupRouter);
-app.use(signoutRouter);
-
-// catch all route thrown NotFound Error for our errorHandler
-// this works because we use express-async-errors
-app.all('*', async () => {
-  throw new NotFoundError();
-});
-
-// error handler
-app.use(errorHandler);
-
+// function to start the appliocation
+// 1. check if all environment variables are available
+// 2. Try to connect to the mongodb/data store
+// 3/ Start listening on port and serving request
 const start = async () => {
   if (!process.env.JWT_KEY) {
     throw new Error('Environment variable JWT_KEY not defined');

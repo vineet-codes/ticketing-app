@@ -15,7 +15,7 @@ declare global {
   }
 }
 
-// if a user is logged in, extract payload at set it up on req.session.currentUser
+// if a user is logged in, extract payload and set it up on req.session.currentUser
 export const currentUser = (
   req: Request,
   res: Response,
