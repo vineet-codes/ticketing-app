@@ -1,7 +1,7 @@
 const Index = () => {
   return (
-    <div className='text-gray-500 font-medium'>
-      Hello World from inside a Kubernetes Cluster
+    <div>
+      <h1 className='text-gray-900 font-semibold text-3xl'>Landing Page</h1>
     </div>
   );
 };
