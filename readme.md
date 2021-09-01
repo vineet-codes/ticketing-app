@@ -4,7 +4,7 @@
 
 This is a microservices based application written in `TypeScript`. Frontend is a server side rendered react application written in `Next.js` and styled with `tailwind-css`. Backend services are written in `express.js`and`node`. We use `MongoDB`and`Redis`for our data storage needs. All interservice communication is aynchronous. We deploy this application by first containerizing individual services using`Docker`. We then orchestrate the containers in a `Kubernetes cluster` to make our product reliable and more manageble.
 
-To run the app, run
+To run the app, make sure you have `Docker for Desktop` and `skaffold`. Once installed, run below
 
 > skaffold dev
 
@@ -124,7 +124,7 @@ We use asynchronous auth, i.e each service knows how to authenticate a user (usi
    - One can encrypt the cookie if it's a hard requirement
 5. Must not require a backing data store on the server
 
-> JWT's meet all the above requirement. Our frontent is a SSR react app hence, we use cookies as a transport mechanism for our JWT's.
+> JWT's meet all the above requirement. Our frontend is a SSR (server side rendered) react app hence, we use cookies as a transport mechanism for our JWT's.
 
 #### Secret sharing in kubernetes cluster
 
@@ -136,4 +136,17 @@ kubectl create secret generic jwt-secret --from-literal=JWT_KEY=yourkey
 
 #### Common Response Properties
 
-We have used toJSON function in userSchema to define the structure of response that we send back to the user, more importantly, we delete the `__v` and `password` fields and remap `_id` to `id`.
+We have used `toJSON` function in `userSchema` to define the structure of response that we send back to the user, more importantly, we delete the `__v` and `password` fields and remap `_id` to `id`.
+
+> more reasearch into kubernetes namespaces needed
+
+Url to make request for SSR rendering to get authed data
+
+```bash
+> kubectl get namespaces
+> kubectl get services -n ingress-nginx
+```
+
+> const url = 'http://ingress-nginx-controller.ingress-nginx.svc.cluster.local';
+
+Difficult to remember, we can setup a `external name service`. This is not neccessary. We do this to avoid remembering the above monstrosity.
