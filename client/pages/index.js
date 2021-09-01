@@ -14,12 +14,11 @@ const Index = ({ data }) => {
   );
 };
 
-export default Index;
-
 export async function getServerSideProps(context) {
   // we are on the server
-  console.log('Landing Page');
   const client = buildClient(context);
   const { data } = await client.get('/api/users/currentuser');
+  console.log(data);
   return { props: { data } };
 }
+export default Index;
