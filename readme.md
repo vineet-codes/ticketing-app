@@ -2,7 +2,7 @@
 
 > this app is under active dev
 
-This is a microservices based application written in `TypeScript`. Frontend is a server side rendered react application written in `Next.js`. Backend services are written in `express.js` and `node`. We use `MongoDB` and `Redis` for our data storage needs. All interservice communication is aynchronous. We deploy this application by first containerizing individual services using `Docker`. We then orchestrate the containers in a `Kubernetes cluster` to make our product reliable and more manageble.
+This is a microservices based application written in `TypeScript`. Frontend is a server side rendered react application written in `Next.js` and styled with `tailwind-css`. Backend services are written in `express.js`and`node`. We use `MongoDB`and`Redis`for our data storage needs. All interservice communication is aynchronous. We deploy this application by first containerizing individual services using`Docker`. We then orchestrate the containers in a `Kubernetes cluster` to make our product reliable and more manageble.
 
 To run the app, run
 
@@ -96,10 +96,35 @@ Let's think about the entities in our domain that we are trying to model. It is 
 
 ### Authentication for microservices
 
+#### Cookies vs JWT: refresher
+
+1. Cookies
+   - Are a transport mechanism
+   - Moves any kind of data between browser and server
+   - Automatically managed by the browser
+2. JWT's
+   - Authentication / Authoriztion mechanism
+   - Stores any data we want
+   - We have to manage it manually
+
 We use asynchronous auth, i.e each service knows how to authenticate a user (using JWT). This allows us to remove sync dependency between services and makes our architecture decoupled. JWT's timing functionality can be used to implement scenarios such as banning / blocking a user on the platform.
 
 1. We use `cookie-session` for setting and reading the cookies. We set `secure: true` for only seeting in https connections. We also set `signed: false` to not sign the cookie, because in our case cookie itself is JWT.
 2. We use `jsonwebtokens` to `sign` and `verify` JWT in this application.
+
+#### Requirements for authentication mechanism in microservices architecture
+
+1. Must be able to tell details about the user
+2. Must be able to handle authorization info
+3. Must have a built-in, tamper ressistant way to expire or invalidate itself
+4. Must be easily understood between different languages
+   - Cookie handling accross languages is usually an issue when we encrypt the data in the cookie
+   - Hence, we do not encrypt the data in the cookie, because
+   - JWT are tamper ressistant
+   - One can encrypt the cookie if it's a hard requirement
+5. Must not require a backing data store on the server
+
+> JWT's meet all the above requirement. Our frontent is a SSR react app hence, we use cookies as a transport mechanism for our JWT's.
 
 #### Secret sharing in kubernetes cluster
 
