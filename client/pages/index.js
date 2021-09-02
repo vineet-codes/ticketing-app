@@ -1,24 +1,25 @@
 import buildClient from '../api/build-client';
 
-const Index = ({ data }) => {
-  console.log(data);
+const Index = ({ currentUser }) => {
+  // console.log(currentUser);
   return (
     <div>
-      <h1 className='text-gray-900 font-semibold text-3xl'>Landing Page</h1>
-      {data.currentUser ? (
+      {currentUser ? (
         <h3>You are signed in</h3>
       ) : (
-        <h3>You are not sign in.</h3>
+        <h3>You are NOT signed in.</h3>
       )}
     </div>
   );
 };
-
-export async function getServerSideProps(context) {
+Index.getInitialProps = async (context) => {
   // we are on the server
+  // console.log('CALLING Index GETINITIALPROPS');
+
   const client = buildClient(context);
   const { data } = await client.get('/api/users/currentuser');
-  console.log(data);
-  return { props: { data } };
-}
+  const currentUser = data.currentUser;
+  // console.log(currentUser);
+  return { currentUser };
+};
 export default Index;
