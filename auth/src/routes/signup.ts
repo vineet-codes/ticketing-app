@@ -5,10 +5,8 @@ import jwt from 'jsonwebtoken';
 
 import { User } from './../models/user';
 
-import { validateRequest } from '../middlewares/validate-request';
-
 // custom sub-classes for error handling
-import { BadRequestError } from '../errors/bad-request';
+import { validateRequest, BadRequestError } from '@vstix/common';
 
 const router = express.Router();
 
