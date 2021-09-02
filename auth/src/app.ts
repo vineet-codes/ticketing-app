@@ -10,8 +10,7 @@ import { signupRouter } from './routes/signup';
 import { signoutRouter } from './routes/signout';
 
 // error-handlers
-import { errorHandler } from './middlewares/error-handler';
-import { NotFoundError } from './errors/not-found-error';
+import { errorHandler, NotFoundError } from '@vstix/common';
 
 const app = express();
 
