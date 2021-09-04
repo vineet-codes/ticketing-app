@@ -1,5 +1,10 @@
 # Ticketing Application
 
+TODO:
+
+- Add/learn obervability to microservices using [this](https://github.com/joao-fontenele/express-prometheus-middleware#readme)
+  - [prometheus docs](https://prometheus.io/docs/concepts/data_model/)
+
 > The rush of excitement we coders feel when we make a computer do something new using nothing more than solitude, brain power, and typing. - Ken Kocienda
 
 This is a microservices based application written in `TypeScript`. Frontend is a server side rendered react application written in `Next.js` and styled with `tailwind-css`. Backend services are written in `express.js`and`node`. We use `MongoDB`and`Redis`for our data storage needs. All interservice communication is aynchronous. We deploy this application by first containerizing individual services using`Docker`. We then orchestrate the containers in a `Kubernetes cluster` to make our product reliable and more manageble.
@@ -150,3 +155,8 @@ Url to make request for SSR rendering to get authed data
 > const url = 'http://ingress-nginx-controller.ingress-nginx.svc.cluster.local';
 
 Difficult to remember, we can setup a `external name service`. This is not neccessary. We do this to avoid remembering the above monstrosity.
+
+### Common npm package to share resuable functionality between services
+
+- common is a npm package called `@vstix/common` which other services use
+- compile to normal js and a type definition file
