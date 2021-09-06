@@ -1,6 +1,8 @@
 import { MongoMemoryServer } from 'mongodb-memory-server';
 import request from 'supertest';
 
+import jwt from 'jsonwebtoken';
+
 import mongoose from 'mongoose';
 import { app } from '../app';
 
@@ -37,19 +39,21 @@ afterAll(async () => {
 });
 
 declare global {
-  var signin: () => Promise<string[]>;
+  var signin: () => [string];
 }
 
-global.signin = async () => {
-  const email = 'test@test.com';
-  const password = 'password';
-
-  const res = await request(app)
-    .post('/api/users/signup')
-    .send({ email, password })
-    .expect(201);
-
-  const cookie = res.get('Set-Cookie');
-
-  return cookie;
+// need to make tests self independent and not depend on other services
+global.signin = () => {
+  // Build a JWT Payload {id, email}
+  const payload = { id: 'jhbfkjbsdk', email: 'test@test.com' };
+  // Create the JWT
+  const token = jwt.sign(payload, process.env.JWT_KEY!);
+  // Build session object {jwt: MY_JWT}
+  const session = { jwt: token };
+  // turn that session into JSON
+  const sessionJSON = JSON.stringify(session);
+  // take that JSON and encode it as base64
+  const base64 = Buffer.from(sessionJSON).toString('base64');
+  // return a string that the cookie with the encoded data
+  return [`express:sess=${base64}`];
 };

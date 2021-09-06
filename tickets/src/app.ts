@@ -4,9 +4,10 @@ import 'express-async-errors';
 import cookieSession from 'cookie-session';
 
 // routes
+import { createTicketRouter } from './routes/new';
 
-// error-handlers
-import { errorHandler, NotFoundError } from '@vstix/common';
+// error-handlers and middlewares
+import { errorHandler, NotFoundError, currentUser } from '@vstix/common';
 
 const app = express();
 
@@ -26,7 +27,10 @@ app.use(
   })
 );
 
+app.use(currentUser);
+
 // user routers
+app.use(createTicketRouter);
 
 // catch all route thrown NotFound Error for our errorHandler
 // this works because we use express-async-errors
