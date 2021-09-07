@@ -45,7 +45,8 @@ declare global {
 // need to make tests self independent and not depend on other services
 global.signin = () => {
   // Build a JWT Payload {id, email}
-  const payload = { id: 'jhbfkjbsdk', email: 'test@test.com' };
+  const id = new mongoose.Types.ObjectId().toHexString();
+  const payload = { id, email: 'test@test.com' };
   // Create the JWT
   const token = jwt.sign(payload, process.env.JWT_KEY!);
   // Build session object {jwt: MY_JWT}

@@ -6,6 +6,8 @@ import cookieSession from 'cookie-session';
 // routes
 import { createTicketRouter } from './routes/new';
 import { showTicketRouter } from './routes/show';
+import { IndexTicketRouter } from './routes/index';
+import { updateTicketRouter } from './routes/update';
 
 // error-handlers and middlewares
 import { errorHandler, NotFoundError, currentUser } from '@vstix/common';
@@ -33,6 +35,8 @@ app.use(currentUser);
 // user routers
 app.use(createTicketRouter);
 app.use(showTicketRouter);
+app.use(IndexTicketRouter);
+app.use(updateTicketRouter);
 
 // catch all route thrown NotFound Error for our errorHandler
 // this works because we use express-async-errors
