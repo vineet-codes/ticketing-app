@@ -1,11 +1,6 @@
 # Ticketing Application
 
-TODO:
-
-- Add/learn obervability to microservices using [this](https://github.com/joao-fontenele/express-prometheus-middleware#readme)
-  - [prometheus docs](https://prometheus.io/docs/concepts/data_model/)
-
-> The rush of excitement we coders feel when we make a computer do something new using nothing more than solitude, brain power, and typing. - Ken Kocienda
+> The rush of excitement we coders feel when we make a computer do something new using nothing more than solitude, brain power, and typing. - Ken Kocienda in Creative Selection
 
 This is a microservices based application written in `TypeScript`. Frontend is a server side rendered react application written in `Next.js` and styled with `tailwind-css`. Backend services are written in `express.js`and`node`. We use `MongoDB`and`Redis`for our data storage needs. All interservice communication is aynchronous. We deploy this application by first containerizing individual services using`Docker`. We then orchestrate the containers in a `Kubernetes cluster` to make our product reliable and more manageble.
 
@@ -160,3 +155,20 @@ Difficult to remember, we can setup a `external name service`. This is not necce
 
 - common is a npm package called `@vstix/common` which other services use
 - compile to normal js and a type definition file
+
+  We can install `@vstix/common` by:
+
+  > npm install @vstix/common
+
+Or, we can update it by (this is more often than not as we add functionality to the common lib which then can be used by other services)
+
+> npm update @vstix/common
+
+### Event Bus: NATS Streaming Server
+
+## TODOS
+
+TODO:
+
+- Add/learn obervability to microservices using [this](https://github.com/joao-fontenele/express-prometheus-middleware#readme)
+  - [prometheus docs](https://prometheus.io/docs/concepts/data_model/)
