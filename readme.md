@@ -180,3 +180,7 @@ TODO:
 
 - Add/learn obervability to microservices using [this](https://github.com/joao-fontenele/express-prometheus-middleware#readme)
   - [prometheus docs](https://prometheus.io/docs/concepts/data_model/)
+
+## References
+
+- [Kubernetes Failure Stories](https://k8s.af/)
