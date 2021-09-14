@@ -3,6 +3,9 @@ import { body } from 'express-validator';
 import { requireAuth, validateRequest } from '@vstix/common';
 import { Ticket } from '../models/ticket';
 
+import { TicketCreatedPublisher } from './../events/publishers/ticket-created-publisher';
+import { natsWrapper } from './../nats-wrapper';
+
 const router = express.Router();
 
 router.post(
@@ -18,8 +21,17 @@ router.post(
   async (req: Request, res: Response) => {
     const { title, price } = req.body;
 
+    // create ticket and save to DB
     const ticket = Ticket.build({ title, price, userId: req.currentUser!.id });
     await ticket.save();
+
+    // publish ticket created event to notify other clients
+    await new TicketCreatedPublisher(natsWrapper.client).publish({
+      id: ticket.id,
+      title: ticket.title,
+      price: ticket.price,
+      userId: ticket.userId,
+    });
 
     res.status(201).send(ticket);
   }

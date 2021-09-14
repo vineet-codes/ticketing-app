@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: tickets
-          image: vineetcodes/tickets:latest
+          image: vineetcodes/tickets
           env:
             - name: MONGO_URI
               value: 'mongodb://tickets-mongo-srv:27017/tickets'

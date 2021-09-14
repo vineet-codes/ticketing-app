@@ -178,9 +178,12 @@ Or, we can update it by (this is more often than not as we add functionality to 
 
 TODO:
 
+- Handle ticket getting created/updated and not being able to publish event scenario.
+
 - Add/learn obervability to microservices using [this](https://github.com/joao-fontenele/express-prometheus-middleware#readme)
   - [prometheus docs](https://prometheus.io/docs/concepts/data_model/)
 
 ## References
 
 - [Kubernetes Failure Stories](https://k8s.af/)
+- [Design Patterns](https://en.wikipedia.org/wiki/Design_Patterns)
