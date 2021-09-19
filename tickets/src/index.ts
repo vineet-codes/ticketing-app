@@ -17,6 +17,7 @@ const start = async () => {
   }
 
   try {
+    // make sure we can connect to event bus before starting the application
     await natsWrapper.connect('ticketing', 'abc', 'http://nats-srv:4222');
 
     // gracefull shutdown for NATS
@@ -28,6 +29,7 @@ const start = async () => {
     process.on('SIGINT', () => natsWrapper.client.close());
     process.on('SIGTERM', () => natsWrapper.client.close());
 
+    // make sure we can connect to database before starting the application
     await mongoose.connect(process.env.MONGO_URI, {
       useNewUrlParser: true,
       useUnifiedTopology: true,

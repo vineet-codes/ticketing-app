@@ -30,14 +30,19 @@ router.put(
       throw new NotFoundError();
     }
 
+    // make sure ticket belongs to the user who is trying to edit it
     if (ticket.userId !== req.currentUser!.id) {
       throw new NotAuthorizedError();
     }
 
+    // this might fail, maybe try catch ?, generic error handler will catch this anyway
     ticket.set({ title: req.body.title, price: req.body.price });
-    // this might fail, maybe try catch ?
     await ticket.save();
 
+    // publish ticket updated event to notify interested services
+    // this might fail, we will not handle this faliure scenario in this project
+    // To Future self: write code handle this scenario
+    // options: to wait or not: if we await publishing event falls in critical path to user response of the api call
     await new TicketUpdatedPublisher(natsWrapper.client).publish({
       id: ticket.id,
       title: ticket.title,

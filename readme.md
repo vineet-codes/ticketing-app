@@ -174,6 +174,22 @@ Or, we can update it by (this is more often than not as we add functionality to 
   - Event Redivelry
   - Durable Subscriptions
 
+#### Implementation design decisions
+
+Every service in the application has some similar requirements to publish / subscribe to different channels (topics if you come from kafka land) of interest. We have used some object oriented concepts to reduce the boilerplate code to achieve this functionality and make it really easy to send / recieve events. We have base abstract classes (`Publisher<T extends Event>` and `Listener<T extends Event>`) in the `@vstix/common` centralised library which each service can extend to either publish events on specific channels or listen for and recieve updates from the system. We also provide centralised source of different events in our system and export it as an enum called `Subjects`, so that we remove the case of typing errors on the individual service developers.
+
+For example, to create publisher for ticket:created event, `TicketCreatedPublisher` , we can define a published as follows
+
+![Ticket created publisher](./public-assets/ticket-created-publisher.png)
+
+Where TicketCreatedEvent is defined in `@vstix/common` as follows
+
+![TicketCreatedEvent](./public-assets/ticket-created-event-interface.png)
+
+and `Subjects` is an enum exported from `@vstix/common` as follows
+
+![Subjects](public-assets/subjects.png)
+
 ## TODOS
 
 TODO:
@@ -182,8 +198,13 @@ TODO:
 
 - Add/learn obervability to microservices using [this](https://github.com/joao-fontenele/express-prometheus-middleware#readme)
   - [prometheus docs](https://prometheus.io/docs/concepts/data_model/)
+  - [Maybe play with this ? loglevel for logging in our application](https://www.npmjs.com/package/loglevel)
 
 ## References
 
+- [How I (Kent C Dods) structure express applicstions](https://kentcdodds.com/blog/how-i-structure-express-apps)
 - [Kubernetes Failure Stories](https://k8s.af/)
 - [Design Patterns](https://en.wikipedia.org/wiki/Design_Patterns)
+- [Database Per Service Design](https://microservices.io/patterns/data/database-per-service.html)
+- [Incement Issue on Containers](https://increment.com/containers/)
+- [To be aimless by deliberate practice](https://www.youtube.com/watch?v=Q4-FHlWNJa4)

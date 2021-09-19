@@ -25,7 +25,9 @@ router.post(
     const ticket = Ticket.build({ title, price, userId: req.currentUser!.id });
     await ticket.save();
 
-    // publish ticket created event to notify other clients
+    // publish ticket created event to notify interested services
+    // this might fail, we will not handle this faliure scenario in this project
+    // To Future self: write code handle this scenario
     await new TicketCreatedPublisher(natsWrapper.client).publish({
       id: ticket.id,
       title: ticket.title,
