@@ -21,13 +21,16 @@ router.post(
   async (req: Request, res: Response) => {
     const { title, price } = req.body;
 
-    // create ticket and save to DB
+    // create ticket
     const ticket = Ticket.build({ title, price, userId: req.currentUser!.id });
+    // and save to DB
     await ticket.save();
 
-    // publish ticket created event to notify interested services
+    // then, publish ticket created event to notify interested services
     // this might fail, we will not handle this faliure scenario in this project
     // To Future self: write code handle this scenario
+    // options: to wait or not:
+    // if we await publishing event falls in critical path to user response of the api call
     await new TicketCreatedPublisher(natsWrapper.client).publish({
       id: ticket.id,
       title: ticket.title,

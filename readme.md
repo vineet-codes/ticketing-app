@@ -192,13 +192,18 @@ and `Subjects` is an enum exported from `@vstix/common` as follows
 
 ## TODOS
 
-TODO:
-
 - Handle ticket getting created/updated and not being able to publish event scenario.
 
+  - [Transactions in Mongoose](https://mongoosejs.com/docs/transactions.html)
+
+  - [Solution approaches to dual write problem in distributed applications](https://developers.redhat.com/articles/2021/09/21/distributed-transaction-patterns-microservices-compared#the_modular_monolith)
+
 - Add/learn obervability to microservices using [this](https://github.com/joao-fontenele/express-prometheus-middleware#readme)
+
   - [prometheus docs](https://prometheus.io/docs/concepts/data_model/)
   - [Maybe play with this ? loglevel for logging in our application](https://www.npmjs.com/package/loglevel)
+
+- It can get confusing and hard to manage all the http status codes we are sending to our api users (in this case our frontend application). We can use [http-status-codes](https://www.npmjs.com/package/http-status-codes) npm module handle this.
 
 ## References
 

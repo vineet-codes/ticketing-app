@@ -8,6 +8,8 @@ import { app } from '../app';
 
 let mongod: any;
 
+jest.mock('./../nats-wrapper');
+
 // before running tests
 beforeAll(async () => {
   // set the environment variable
@@ -25,6 +27,7 @@ beforeAll(async () => {
 // before runing each test
 // lets make sure we delete all collections in the testdb
 beforeEach(async () => {
+  jest.clearAllMocks();
   const collections = await mongoose.connection.db.collections();
 
   for (let collection of collections) {
