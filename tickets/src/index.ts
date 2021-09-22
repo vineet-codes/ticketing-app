@@ -16,9 +16,25 @@ const start = async () => {
     throw new Error('Environment variable JWT_KEY not defined');
   }
 
+  if (!process.env.NATS_URL) {
+    throw new Error('Environment variable NATS_URL not defined');
+  }
+
+  if (!process.env.NATS_CLUSTER_ID) {
+    throw new Error('Environment variable NATS_CLUSTER_ID not defined');
+  }
+
+  if (!process.env.NATS_CLIENT_ID) {
+    throw new Error('Environment variable NATS_CLIENT_ID not defined');
+  }
+
   try {
     // make sure we can connect to event bus before starting the application
-    await natsWrapper.connect('ticketing', 'abc', 'http://nats-srv:4222');
+    await natsWrapper.connect(
+      process.env.NATS_CLUSTER_ID,
+      process.env.NATS_CLIENT_ID,
+      process.env.NATS_URL
+    );
 
     // gracefull shutdown for NATS
     natsWrapper.client.on('close', () => {

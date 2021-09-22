@@ -77,6 +77,7 @@ Let's think about the entities in our domain that we are trying to model. It is 
 ## Notes
 
 - We use ingress-nginx for communicating with kubernetes cluster from outside
+  - install it if you reset your cluster from [here](https://kubernetes.github.io/ingress-nginx/deploy/)
 
 ### Normalisation Strategies
 
@@ -213,3 +214,4 @@ and `Subjects` is an enum exported from `@vstix/common` as follows
 - [Database Per Service Design](https://microservices.io/patterns/data/database-per-service.html)
 - [Incement Issue on Containers](https://increment.com/containers/)
 - [To be aimless by deliberate practice](https://www.youtube.com/watch?v=Q4-FHlWNJa4)
+- [How Big Tech Runs Tech Projects and the Curious Absence of Scrum](https://newsletter.pragmaticengineer.com/p/project-management-in-tech)]
