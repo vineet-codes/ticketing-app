@@ -191,6 +191,16 @@ and `Subjects` is an enum exported from `@vstix/common` as follows
 
 ![Subjects](public-assets/subjects.png)
 
+### Order Service
+
+1. Scaffolding orders _(or any new service)_ service
+   - Duplicate tickets service
+   - make name changes and install dependencies
+   - build an image out of the service
+   - Create a Kubernetes deployment file
+   - setup file sync options in skaffold.yaml file
+   - setup routing rules in the ingress service
+
 ## TODOS
 
 - Handle ticket getting created/updated and not being able to publish event scenario.
