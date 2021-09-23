@@ -191,7 +191,7 @@ and `Subjects` is an enum exported from `@vstix/common` as follows
 
 ![Subjects](public-assets/subjects.png)
 
-### Order Service
+### How to create a new service in the application
 
 1. Scaffolding orders _(or any new service)_ service
    - Duplicate tickets service

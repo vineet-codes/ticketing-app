@@ -4,10 +4,10 @@ import 'express-async-errors';
 import cookieSession from 'cookie-session';
 
 // routes
-import { createTicketRouter } from './routes/new';
-import { showTicketRouter } from './routes/show';
-import { IndexTicketRouter } from './routes/index';
-import { updateTicketRouter } from './routes/update';
+import { createOrderRouter } from './routes/new';
+import { showOrderRouter } from './routes/show';
+import { indexOrderRouter } from './routes/index';
+import { deleteOrderRouter } from './routes/delete';
 
 // error-handlers and middlewares
 import { errorHandler, NotFoundError, currentUser } from '@vstix/common';
@@ -33,10 +33,10 @@ app.use(
 app.use(currentUser);
 
 // user routers
-app.use(createTicketRouter);
-app.use(showTicketRouter);
-app.use(IndexTicketRouter);
-app.use(updateTicketRouter);
+app.use(createOrderRouter);
+app.use(showOrderRouter);
+app.use(indexOrderRouter);
+app.use(deleteOrderRouter);
 
 // catch all route thrown NotFound Error for our errorHandler
 // this works because we use express-async-errors
