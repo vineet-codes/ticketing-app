@@ -165,6 +165,96 @@ Or, we can update it by (this is more often than not as we add functionality to 
 
 > npm update @vstix/common
 
+#### Mongo data model associations
+
+Similar to foriegn key constraint, Mongo has a concept of Ref/Population. Below are some implementation detail. Below, an Order is ted to a ticket using a `ref` property. The type is a `mongoose.Schema.Types.ObjectId`.
+
+```javascript
+const orderSchema = new mongoose.Schema(
+  {
+    userId: {
+      type: String,
+      required: [true, 'Please provide a userId'],
+    },
+    status: {
+      type: String,
+      required: [true, 'status is a required field, it seems to be missing'],
+      enum: Object.values(OrderStatus),
+      default: OrderStatus.Created,
+    },
+    expiresAt: {
+      type: mongoose.Schema.Types.Date,
+    },
+    ticket: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Ticket',
+    },
+  },
+  {
+    toJSON: {
+      transform(doc, ret) {
+        ret.id = ret._id;
+        delete ret._id;
+        delete ret.__v;
+      },
+    },
+  }
+);
+
+const ticketSchema = new mongoose.Schema(
+  {
+    title: {
+      type: String,
+      required: true,
+    },
+
+    price: {
+      type: Number,
+      required: true,
+      min: 0,
+    },
+  },
+  {
+    toJSON: {
+      transform(doc, ret) {
+        ret.id = ret._id;
+        delete ret._id;
+      },
+    },
+  }
+);
+```
+
+In this referenceing solution, primarily we are concerned only in 3 following situation
+
+- To associate an existing Order and Ticket together
+
+```javascript
+const ticket = await Ticket.findOne({});
+const order = await Order.findOne({});
+
+order.ticket = ticket;
+await order.save();
+```
+
+- To associate Ticket with a new Order
+
+```javascript
+const ticket = await Ticket.findOne({});
+const order = Order.build({
+  ticket: ticket,
+  userId: '....',
+  status: OrderStatus.Created,
+  expiresAt: tommorow,
+});
+```
+
+- To fetch an existing Order from the database, with its associated Ticket
+
+```javascript
+const order = await Order.findById('....').populate('ticket');
+```
+
 ### Event Bus: NATS Streaming Server
 
 - clientID concept
@@ -181,25 +271,48 @@ Every service in the application has some similar requirements to publish / subs
 
 For example, to create publisher for ticket:created event, `TicketCreatedPublisher` , we can define a published as follows
 
-![Ticket created publisher](./public-assets/ticket-created-publisher.png)
+```javascript
+import { Publisher, Subjects, TicketCreatedEvent } from '@vstix/common';
+
+export class TicketCreatedPublisher extends Publisher<TicketCreatedEvent> {
+  readonly subject: Subjects.TicketCreated = Subjects.TicketCreated;
+}
+```
 
 Where TicketCreatedEvent is defined in `@vstix/common` as follows
 
-![TicketCreatedEvent](./public-assets/ticket-created-event-interface.png)
+```javascript
+import { Subjects } from './subjects';
+
+export interface TicketCreatedEvent {
+  subject: Subjects.TicketCreated;
+  data: {
+    id: string,
+    title: string,
+    price: number,
+    userId: string,
+  };
+}
+```
 
 and `Subjects` is an enum exported from `@vstix/common` as follows
 
-![Subjects](public-assets/subjects.png)
+```javascript
+export enum Subjects {
+  TicketCreated = 'ticket:created',
+  TicketUpdated = 'ticket:updated',
+}
+```
 
 ### How to create a new service in the application
 
-1. Scaffolding orders _(or any new service)_ service
-   - Duplicate tickets service
-   - make name changes and install dependencies
-   - build an image out of the service
-   - Create a Kubernetes deployment file
-   - setup file sync options in skaffold.yaml file
-   - setup routing rules in the ingress service
+- Scaffolding orders _(or any new service)_ service
+  - Duplicate tickets service
+  - make name changes and install dependencies
+  - build an image out of the service
+  - Create a Kubernetes deployment file
+  - setup file sync options in skaffold.yaml file
+  - setup routing rules in the ingress service
 
 ## TODOS
 
@@ -215,6 +328,8 @@ and `Subjects` is an enum exported from `@vstix/common` as follows
   - [Maybe play with this ? loglevel for logging in our application](https://www.npmjs.com/package/loglevel)
 
 - It can get confusing and hard to manage all the http status codes we are sending to our api users (in this case our frontend application). We can use [http-status-codes](https://www.npmjs.com/package/http-status-codes) npm module handle this.
+
+- Change Data Capture: [Explore Debezium which automatically creates event from database writes](https://debezium.io/)
 
 ## References
 
