@@ -331,6 +331,8 @@ export enum Subjects {
 
 - Change Data Capture: [Explore Debezium which automatically creates event from database writes](https://debezium.io/)
 
+- Distributed Tracing with [Jaeger: open source, end-to-end distributed tracing](https://www.jaegertracing.io/docs/1.26/operator/)
+
 ## References
 
 - [How I (Kent C Dods) structure express applicstions](https://kentcdodds.com/blog/how-i-structure-express-apps)

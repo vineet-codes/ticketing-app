@@ -59,7 +59,7 @@ router.post(
       ticket: ticket,
     });
 
-    await order.save();
+    await order.save(); // this might fail
 
     // publish an event for OrderCreated Event
     // TODO

@@ -54,7 +54,7 @@ ticketSchema.statics.build = (attrs: TicketAttrs) => {
 // run query to look at all order, find an order with,
 // tickect as above and orderstatus is not cancelled
 ticketSchema.methods.isReserved = async function () {
-  console.log('isReserved call:', this, typeof this);
+  // console.log('isReserved call:', this, typeof this);
 
   // this === the ticket document that we just called 'isReserved' on
   const existingOrder = await Order.findOne({
